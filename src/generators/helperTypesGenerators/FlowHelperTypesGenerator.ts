@@ -23,7 +23,9 @@ export default class FlowHelperTypesGenerator implements IHelperTypesGenerator {
 		} else {
 			apiNames =
 				"\n" +
-				flowsMetadata.map((flow) => `\t\t"${flow.fullName}"`).join(" |\n");
+				flowsMetadata
+					.sort((a, b) => a.fullName.localeCompare(b.fullName))
+					.map((flow) => `\t\t"${flow.fullName}"`).join(" |\n");
 		}
 		const typings = typingsHeader + apiNames + "\n}\n";
 		const outputPath = join(helperTypesRoot, "flows.d.ts");

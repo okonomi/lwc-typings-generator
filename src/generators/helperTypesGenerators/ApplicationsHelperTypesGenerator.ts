@@ -20,7 +20,9 @@ export default class ApplicationsHelperTypesGenerator
 			.list({ type: METADATA_TYPES.APPLICATION })
 			.then(wrapInArray)
 			.then((applications) =>
-				applications.map((application) => `\t\t"${application.fullName}"`)
+				applications
+					.sort((a, b) => a.fullName.localeCompare(b.fullName))
+					.map((application) => `\t\t"${application.fullName}"`)
 			)
 			.then((typingsArray) => typingsArray.join("| \n"));
 		const fileName = join(helperTypesRoot, "applications.d.ts");

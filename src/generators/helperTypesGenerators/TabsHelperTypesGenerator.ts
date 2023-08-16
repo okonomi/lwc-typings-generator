@@ -16,6 +16,7 @@ export default class TabsHelperTypesGenerator implements IHelperTypesGenerator {
 		const typingsFile = join(helperTypesRoot, "tabs.d.ts");
 		let typings = `declare namespace Salesforce {\n\tdeclare type TabApiName =\n`;
 		typings += tasMetadata
+			.sort((a, b) => a.fullName.localeCompare(b.fullName))
 			.map((tabMetadata) => `\t\t"${tabMetadata.fullName}"`)
 			.join(" |\n");
 		return promises.writeFile(typingsFile, typings + "\n}\n");
