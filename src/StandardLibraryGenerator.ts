@@ -76,13 +76,15 @@ export default class StandardLibraryGenerator {
 		await connection.metadata
 			.list({ type: "LightningComponentBundle" })
 			.then((metadata) =>
-				wrapInArray(metadata).map((m) => {
-					const namespace = m.namespacePrefix ?? "c";
-					const fullName = m.fullName;
-					const tagName = this.kebabCase(`${namespace}-${fullName}`);
-					const importPath = `import("${namespace}/${fullName}").default`;
-					tagNameToLwcComponentImport.set(tagName, importPath);
-				})
+				wrapInArray(metadata)
+					.sort((a, b) => a.fullName.localeCompare(b.fullName))
+					.map((m) => {
+						const namespace = m.namespacePrefix ?? "c";
+						const fullName = m.fullName;
+						const tagName = this.kebabCase(`${namespace}-${fullName}`);
+						const importPath = `import("${namespace}/${fullName}").default`;
+						tagNameToLwcComponentImport.set(tagName, importPath);
+					})
 			);
 		const baseTypings = await promises.readFile(
 			join(getResourcesFolder(), "base.d.ts"),
